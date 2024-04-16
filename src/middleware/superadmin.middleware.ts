@@ -6,20 +6,17 @@ interface AuthRequest extends Request {
   user?: JwtPayload;
 }
 
-export const verifyToken = async (
+export const verifySuperAdmin = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const secretKey = process.env.JWT_SECRET! as Secret;
-  const token = req.header("Authorization");
-  if (!token) return res.status(401).json({ error: "Access denied" });
   try {
-    const decoded: JwtPayload = jwt.verify(token!, secretKey) as JwtPayload;
-    req.user = decoded;
+    if (req.user!.role !== "super_admin") {
+      return res.status(401).json({ error: "Access denied" });
+    }
     next();
   } catch (error) {
-    console.log(error);
     res.status(401).json({ error: "Invalid token" });
   }
 };

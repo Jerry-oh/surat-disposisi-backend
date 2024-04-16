@@ -1,0 +1,24 @@
+POST http://localhost:3000/api/v1/users/register HTTP/1.1
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFlMjcyMmEzMzA1MGU4OWMzNzdhOTEiLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJuYW1lIjoiZGV2b24iLCJpYXQiOjE3MTMyNTUxMzcsImV4cCI6MTcxMzI1ODczN30.nuTBEtwM6Lg4YQjqSdVUxpt29p_vfVfafFHp9XpWGzU
+
+{
+    "name": "william",
+    "role": "karyawan",
+    "password": "123456"
+}
+
+###
+GET http://localhost:3000/api/v1/users/list-users HTTP/1.1
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFlMjcyMmEzMzA1MGU4OWMzNzdhOTEiLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJuYW1lIjoiZGV2b24iLCJpYXQiOjE3MTMyNTUxMzcsImV4cCI6MTcxMzI1ODczN30.nuTBEtwM6Lg4YQjqSdVUxpt29p_vfVfafFHp9XpWGzU
+
+
+###
+POST http://localhost:3000/api/v1/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "name": "devon",
+    "password": "123456"
+}
