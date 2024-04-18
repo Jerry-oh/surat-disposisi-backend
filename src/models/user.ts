@@ -8,20 +8,23 @@ export interface User extends mongoose.Document {
   username: string;
   email: string;
   phone_number: number;
-  role: string;
+  role: Role;
 }
 
-const userSchema = new mongoose.Schema<User>({
-  name: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  username: { type: String, required: false },
-  email: { type: String, required: false },
-  phone_number: { type: Number, required: false },
-  role: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema<User>(
+  {
+    name: { type: String, required: true, unique: true },
+    password: { type: String, required: true, select: false },
+    username: { type: String, required: false },
+    email: { type: String, required: false },
+    phone_number: { type: Number, required: false },
+    role: {
+      type: String,
+      required: true,
+    },
   },
-});
+  { versionKey: false }
+);
 
 userSchema.pre<User>("save", async function (next) {
   if (!this.isModified("password")) {

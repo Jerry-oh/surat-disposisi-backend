@@ -42,7 +42,7 @@ export const login = async (req: Request, res: Response) => {
   const { name, password } = req.body;
 
   try {
-    const user = await User.findOne({ name });
+    const user = await User.findOne({ name }).select("password");
     if (!user) {
       return res.status(401).json({ message: "Invalid name or password" });
     }
@@ -60,7 +60,6 @@ export const login = async (req: Request, res: Response) => {
       username: user?.username,
     };
     const secret: string = process.env.JWT_SECRET!;
-    console.log(secret);
 
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
 

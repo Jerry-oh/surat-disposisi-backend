@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import connectDB from "./database/database";
 import userRoute from "./routes/user.route";
+import letterRoute from "./routes/letter.route";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/users", userRoute);
+app.use("/api/v1/letters", letterRoute);
 
 connectDB().then(() => {
   app.listen(port, () => {
