@@ -3,7 +3,7 @@ import Letter, { Recipient, UserRecipient } from "../models/letter";
 import mongoose from "mongoose";
 import { AuthRequest } from "../middleware/auth.middleware";
 import { RecipientCheckedStatus } from "../enums/recipient-checked-status.enum";
-import { LetterStatus } from "../enums/recipient-status.enum";
+import { LetterStatus } from "../enums/letter-status.enum";
 
 async function createLetter(
   creator: string,
@@ -29,6 +29,25 @@ async function createLetter(
   });
 
   await newLetter.save();
+}
+
+async function updateRecipientRead(letterId: string, userId: string) {
+  const letter = await Letter.findById(letterId);
+
+  if (!letter) {
+    throw new Error("Letter not found.");
+  }
+
+  const recipientIndex = letter.recipients.findIndex(
+    (recipient) => recipient.userId.toString() === userId
+  );
+
+  if (recipientIndex === -1) {
+    throw new Error("User is not a recipient of this letter.");
+  }
+
+  letter.recipients[recipientIndex].read = true;
+  await letter.save();
 }
 
 async function updateCheckedStatus(
@@ -138,7 +157,21 @@ class LetterController {
       const { letterId, status } = req.params;
       const userId = req.user?.userId;
       await updateCheckedStatus(letterId, userId, status);
-      res.status(200).json({ message: "Checked status updated!" });
+      res.status(200).json({ message: "Recipient checked status updated!" });
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).json({ error: error.message });
+      }
+      return res.status(400).json({ error: error });
+    }
+  }
+
+  async updateRecipientRead(req: AuthRequest, res: Response) {
+    try {
+      const { letterId } = req.params;
+      const userId = req.user?.userId;
+      await updateRecipientRead(letterId, userId);
+      res.status(200).json({ message: "Recipient read updated!" });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(400).json({ error: error.message });

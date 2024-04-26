@@ -5,9 +5,14 @@ const router = express.Router();
 
 router.post("/", verifyToken, letterController.createLetter);
 router.put(
-  "/:letterId/checked/:status",
+  "/:letterId/recipient-checked/:status",
   verifyToken,
   letterController.updateCheckedStatus
+);
+router.put(
+  "/:letterId/recipient-read",
+  verifyToken,
+  letterController.updateRecipientRead
 );
 router.put(
   "/:letterId/status/:status",

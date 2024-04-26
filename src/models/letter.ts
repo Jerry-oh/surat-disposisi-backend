@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { RecipientCheckedStatus } from "../enums/recipient-checked-status.enum";
-import { LetterStatus } from "../enums/recipient-status.enum";
+import { LetterStatus } from "../enums/letter-status.enum";
 
 // interface Letter {
 //   creator: string;
@@ -27,6 +27,7 @@ export interface Recipient {
   userId: UserRecipient | mongoose.Schema.Types.ObjectId;
   priority: number;
   checked: RecipientCheckedStatus;
+  read: boolean;
 }
 
 interface Letter {
@@ -44,17 +45,21 @@ const letterSchema = new mongoose.Schema<Letter>(
       ref: "User",
       required: true,
     },
-    recipients: [
-      {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
+    recipients: {
+      type: [
+        {
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+          },
+          priority: { type: Number, required: true },
+          checked: { type: String, default: RecipientCheckedStatus.PENDING },
+          read: { type: Boolean, default: false },
         },
-        priority: { type: Number, required: true },
-        checked: { type: String, default: RecipientCheckedStatus.PENDING },
-      },
-    ],
+      ],
+      required: true,
+    },
     subject: { type: String, required: true },
     description: { type: String, required: true },
     status: { type: String, default: LetterStatus.ONGOING },
