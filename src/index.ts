@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import connectDB from "./database/database";
+import userRoute from "./routes/user.route";
+import letterRoute from "./routes/letter.route";
 
 dotenv.config();
 
@@ -8,8 +10,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use((req, res, next) => {
-  console.log(req.headers);
-  console.log(req.originalUrl);
   res.set({
     "Access-Control-Allow-Origin": "http://localhost:3000",
     "Access-Control-Allow-Headers": "content-type, Authorization",
@@ -28,6 +28,9 @@ app.get("/", (req: Request, res: Response) => {
     environment: process.env.NODE_ENV,
   });
 });
+
+app.use("/api/v1/users", userRoute);
+app.use("/api/v1/letters", letterRoute);
 
 connectDB().then(() => {
   app.listen(port, () => {

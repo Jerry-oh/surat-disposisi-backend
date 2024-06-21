@@ -1,0 +1,54 @@
+POST http://localhost:3000/api/v1/users/register HTTP/1.1
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFlMjcyMmEzMzA1MGU4OWMzNzdhOTEiLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJuYW1lIjoiZGV2b24iLCJpYXQiOjE3MTMyNTUxMzcsImV4cCI6MTcxMzI1ODczN30.nuTBEtwM6Lg4YQjqSdVUxpt29p_vfVfafFHp9XpWGzU
+
+{
+    "name": "william",
+    "role": "karyawan",
+    "password": "123456"
+}
+
+###
+GET http://localhost:3000/api/v1/users/list-users HTTP/1.1
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFlMjcyMmEzMzA1MGU4OWMzNzdhOTEiLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJuYW1lIjoiZGV2b24iLCJpYXQiOjE3MTMyNTUxMzcsImV4cCI6MTcxMzI1ODczN30.nuTBEtwM6Lg4YQjqSdVUxpt29p_vfVfafFHp9XpWGzU
+
+###
+POST http://localhost:3000/api/v1/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "name": "william",
+    "password": "123456"
+}
+
+
+###
+POST http://localhost:3000/api/v1/letters/ HTTP/1.1
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFlMjJhMGU2ZDdmN2Y0MDAxNTU1MzIiLCJpYXQiOjE3MTM0MjI1NjgsImV4cCI6MTcxMzQyNjE2OH0.10lOvrWNrQNYrr_svtIqbFbpltsZez83JlyRvkIpV7Q
+
+{
+    "recipients": [
+        {"userId": "661e2266e6d7f7f400155528", "priority": 2},
+        {"userId": "661e22e81d2515e07892ea98", "priority": 3},
+        {"userId": "661e32312c3ca24c4cbee222", "priority": 1}
+    ],
+    "subject": "Pemeriksaan mendalam",
+    "description": "Ini adalah pengajuan surat untuk yang pertama kali"
+}
+
+###
+GET http://localhost:3000/api/v1/letters/ HTTP/1.1
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFlMjJhMGU2ZDdmN2Y0MDAxNTU1MzIiLCJpYXQiOjE3MTM0MjI1NjgsImV4cCI6MTcxMzQyNjE2OH0.10lOvrWNrQNYrr_svtIqbFbpltsZez83JlyRvkIpV7Q
+
+###
+GET http://localhost:3000/api/v1/letters/current-user?checkedStatusIsRequest=true&status=rejected HTTP/1.1
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFlMzIzMTJjM2NhMjRjNGNiZWUyMjIiLCJpYXQiOjE3MTM0MjI2NjksImV4cCI6MTcxMzQyNjI2OX0.6bvnuZQvAVNhZ5s_oaA7SZKacbUjhpxoXXsKuNhNho8
+
+###
+PUT http://localhost:3000/api/v1/letters/661f79860922cd4593748068/checked/approved HTTP/1.1
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFlMjI2NmU2ZDdmN2Y0MDAxNTU1MjgiLCJpYXQiOjE3MTMzNDQyMjgsImV4cCI6MTcxMzM0NzgyOH0.1Irg5BhtR4OXDuSb2IKFgIXwjokfoYlBU7TMPpCi8OY
