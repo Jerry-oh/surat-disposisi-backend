@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { RecipientCheckedStatus } from "../enums/recipient-checked-status.enum";
 import { LetterStatus } from "../enums/letter-status.enum";
+import { LetterPriority } from "../enums/letter-priority.enum";
 
 // interface Letter {
 //   creator: string;
@@ -31,15 +32,24 @@ export interface Recipient {
 }
 
 interface Letter {
+  dateCreated: Date;
   creator: mongoose.Schema.Types.ObjectId;
   recipients: Recipient[];
   subject: string;
   description: string;
   status: LetterStatus;
+  priority: LetterPriority;
 }
 
 const letterSchema = new mongoose.Schema<Letter>(
   {
+    dateCreated: { type: Date, required: true, default: Date.now() },
+    priority: {
+      type: String,
+      enum: LetterPriority,
+      required: true,
+      default: LetterPriority.REGULAR,
+    },
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
