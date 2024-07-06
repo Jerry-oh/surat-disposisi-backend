@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Letter, { Recipient, UserRecipient } from "../models/letter";
 import mongoose from "mongoose";
 import { AuthRequest } from "../middleware/auth.middleware";
@@ -74,14 +74,13 @@ async function updateCheckedStatus(
       "You can only update status if the current position is request"
     );
   }
-
   letter.recipients[recipientIndex].checked =
     recipientCheckedStatus as RecipientCheckedStatus;
 
   if (recipientCheckedStatus === RecipientCheckedStatus.APPROVED) {
     const nextRecipientIndex = letter.recipients.findIndex(
       (recipient) =>
-        recipient.priority > letter.recipients[recipientIndex].priority
+        recipient.priority == letter.recipients[recipientIndex].priority + 1
     );
     if (nextRecipientIndex !== -1) {
       letter.recipients[nextRecipientIndex].checked =
@@ -118,12 +117,24 @@ async function getLettersForCurrentUser(
   if (checkedStatusRequest === true && status === LetterStatus.ONGOING) {
     recipientsFilter.checked = RecipientCheckedStatus.REQUEST;
   }
-  const letters = await Letter.find({
-    recipients: {
-      $elemMatch: recipientsFilter,
+  const letters = await Letter.find(
+    {
+      recipients: {
+        $elemMatch: recipientsFilter,
+      },
+      status: status,
     },
-    status: status,
-  }).populate(["creator", "recipients.userId"]);
+    {
+      _id: 1,
+      creator: 1,
+      dateCreated: 1,
+      subject: 1,
+      description: 1,
+      status: 1,
+      priority: 1,
+      "recipients.$": 1,
+    }
+  ).populate(["creator", "recipients.userId"]);
 
   return letters;
 }
@@ -138,7 +149,7 @@ async function getAllLetters() {
 }
 
 class LetterController {
-  async createLetter(req: AuthRequest, res: Response) {
+  async createLetter(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const creator = req.user?.userId;
       const { recipients, subject, description } = req.body;

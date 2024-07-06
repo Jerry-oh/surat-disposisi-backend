@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 
 app.use((req, res, next) => {
   res.set({
-    "Access-Control-Allow-Origin": "http://localhost:3000",
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "content-type, Authorization",
     "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
     "Access-Control-Max-Age": 86400,
