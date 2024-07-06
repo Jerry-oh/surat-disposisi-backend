@@ -84,15 +84,6 @@ export const listUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserInfo = async (req: AuthRequest, res: Response) => {
-  try {
-    res.status(200).json({ status: "Success", data: req.user });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
-  }
-};
-
 export const getAllUsers = async (req: AuthRequest, res: Response) => {
   try {
     const users = await User.find().select("name");
