@@ -3,6 +3,7 @@ import { Role } from "../enums/role.enum";
 import bcrypt from "bcrypt";
 
 export interface User extends mongoose.Document {
+  nik: number;
   name: string;
   password: string;
   username: string;
@@ -13,7 +14,8 @@ export interface User extends mongoose.Document {
 
 const userSchema = new mongoose.Schema<User>(
   {
-    name: { type: String, required: true, unique: true },
+    nik: { type: Number, required: true, unique: true },
+    name: { type: String, required: true },
     password: { type: String, required: true, select: false },
     username: { type: String, required: false },
     email: { type: String, required: false },
