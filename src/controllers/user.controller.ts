@@ -7,7 +7,7 @@ import { AuthRequest } from "../middleware/auth.middleware";
 
 export const register = async (req: Request, res: Response) => {
   const { nik, name, password, role } = req.body;
-
+  let priority: number | undefined;
   try {
     const existingUser = await User.findOne({ nik });
     if (existingUser) {
@@ -16,8 +16,9 @@ export const register = async (req: Request, res: Response) => {
     let found: boolean = false;
 
     for (const x of Object.values(Role)) {
-      if (role === x) {
+      if (role === x.roleName) {
         found = true;
+        priority = x.priority;
         break;
       }
     }
@@ -29,8 +30,7 @@ export const register = async (req: Request, res: Response) => {
             Object.values(Role).join(", ")
         );
     }
-
-    const newUser = new User({ nik, name, password, role });
+    const newUser = new User({ nik, name, password, role, priority });
     await newUser.save();
     res.send("User registered successfully!");
   } catch (error) {
@@ -52,8 +52,6 @@ export const login = async (req: Request, res: Response) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid name or password" });
     }
-    console.log("user");
-    console.log(user);
     const payload = {
       nik: user.nik,
       userId: user._id,
@@ -61,6 +59,7 @@ export const login = async (req: Request, res: Response) => {
       name: user.name,
       email: user?.email,
       username: user?.username,
+      priority: user.priority,
     };
     const secret: string = process.env.JWT_SECRET!;
 
@@ -86,8 +85,36 @@ export const listUsers = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: AuthRequest, res: Response) => {
   try {
-    const users = await User.find().select("name");
+    const users = await User.find().select("name role");
     res.json({ status: "Success", data: users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+export const updateUserData = async (req: AuthRequest, res: Response) => {
+  try {
+    const {
+      nik,
+      updatedName,
+      updatedNik,
+      updatedRole,
+      updatedPhoneNum,
+      updatedPas,
+    } = req.body;
+    const user = await User.findOne({ nik }).select("+password");
+    if (!user)
+      return res
+        .status(404)
+        .json({ status: "failed", message: "there is no user with that nik" });
+    user.name = updatedName ?? user.name;
+    user.nik = updatedNik ?? user.nik;
+    user.role = updatedRole ?? user.nik;
+    user.phone_number = updatedPhoneNum ?? user.phone_number;
+    user.password = updatedPas ?? user.password;
+    await user.save();
+    res.status(200).json({ status: "user update successful" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
