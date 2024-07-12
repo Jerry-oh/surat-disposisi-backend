@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev src/index.ts",
+    "start": "tsc-watch --onSuccess \"nodemon ./dist/index.js\"",
     "build": "tsc",
     "serve": "node dist/index.js"
   },
@@ -19,6 +19,8 @@
     "express": "^4.19.2",
     "mongoose": "^8.3.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsc-watch": "^6.2.0",
     "typescript": "^5.4.4"
   },
   "dependencies": {

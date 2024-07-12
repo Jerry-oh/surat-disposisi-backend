@@ -9,6 +9,12 @@ router.put(
   verifyToken,
   letterController.updateCheckedStatus
 );
+
+router.get(
+  "/userResponseLetter/:responseStatus",
+  verifyToken,
+  letterController.getUserResponseLetter
+);
 router.put(
   "/:letterId/recipient-read",
   verifyToken,
@@ -25,5 +31,9 @@ router.get(
   verifyToken,
   letterController.getLettersForCurrentUser
 );
-
+router.get(
+  "/userCreatedLetters/:letterStatus",
+  verifyToken,
+  letterController.getUserCreatedLetter
+);
 export default router;

@@ -54,12 +54,13 @@ export const login = async (req: Request, res: Response) => {
     }
     const payload = {
       nik: user.nik,
-      userId: user._id,
+      _id: user._id,
       role: user.role,
       name: user.name,
       email: user?.email,
       username: user?.username,
       priority: user.priority,
+      phone_number: user.phone_number,
     };
     const secret: string = process.env.JWT_SECRET!;
 

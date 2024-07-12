@@ -39,10 +39,12 @@ interface Letter {
   description: string;
   status: LetterStatus;
   priority: LetterPriority;
+  progres: number;
 }
 
 const letterSchema = new mongoose.Schema<Letter>(
   {
+    progres: { type: Number, required: true, default: 0, max: 1, min: 0 },
     dateCreated: { type: Date, required: true, default: Date.now() },
     priority: {
       type: String,
@@ -70,8 +72,8 @@ const letterSchema = new mongoose.Schema<Letter>(
       ],
       required: true,
     },
-    subject: { type: String, required: true },
-    description: { type: String, required: true },
+    subject: { type: String, required: true, default: " " },
+    description: { type: String, required: true, default: " " },
     status: { type: String, default: LetterStatus.ONGOING },
   },
   { versionKey: false }

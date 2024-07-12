@@ -10,10 +10,16 @@ export interface User extends mongoose.Document {
   email: string;
   phone_number: number;
   role: Role;
+  priority: number;
 }
 
 const userSchema = new mongoose.Schema<User>(
   {
+    priority: {
+      type: Number,
+      required: true,
+      enum: Object.values(Role).map((Role) => Role.priority),
+    },
     nik: { type: Number, required: true, unique: true },
     name: { type: String, required: true },
     password: { type: String, required: true, select: false },
